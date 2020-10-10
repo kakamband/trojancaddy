@@ -1,3 +1,5 @@
-#!/usr/bin/with-contenv sh
+#!/usr/bin/execlineb -P
+with-contenv
+s6-setuidgid trojancaddy
 
-/usr/bin/caddy run --config /etc/caddy/config.json
+/usr/bin/caddy run --config /config/caddy/config.json

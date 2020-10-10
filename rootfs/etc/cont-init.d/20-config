@@ -2,20 +2,11 @@
 
 echo 'INIT...'
 
-mkdir -p \
-  /etc/caddy \
-  usr/share/caddy \
-  /etc/trojan
+[[ ! -f /config/caddy/config.json ]] && \
+  cp /defaults/caddy.json /config/caddy/config.json
 
-[[ ! -f /etc/caddy/config.json ]] && \
-  cp /defaults/caddy.json /etc/caddy/config.json
+[[ ! -f /srv/caddy/index.html ]] && \
+  cp /defaults/index.html /srv/caddy/index.html
 
-[[ ! -f /usr/share/caddy/index.html ]] && \
-  cp /defaults/index.html /usr/share/caddy/index.html
-
-[[ ! -f /etc/trojan/config.json ]] && \
-  cp /defaults/trojan.json /etc/trojan/config.json
-
-#chown -R abc:abc \
-#  /config \
-#  /etc/caddy
+[[ ! -f /config/trojan/config.json ]] && \
+  cp /defaults/trojan.json /config/trojan/config.json

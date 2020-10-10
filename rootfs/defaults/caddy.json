@@ -7,8 +7,8 @@
           "routes": [
             {
               "handle": [
-                { "handler": "vars", "root": "/usr/share/caddy" },
-                { "handler": "file_server", "hide": ["/etc/caddy/Caddyfile"] }
+                { "handler": "vars", "root": "/srv/caddy" },
+                { "handler": "file_server", "hide": ["/config/caddy/config.json"] }
               ]
             }
           ]

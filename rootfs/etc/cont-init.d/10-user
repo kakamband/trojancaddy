@@ -1,21 +1,11 @@
-#!/usr/bin/with-contenv sh
+#!/usr/bin/with-contenv bash
 
-UID=${UID:-911}
-GID=${GID:-911}
+PUID=${PUID:-911}
+PGID=${PGID:-911}
 
-#if [ -z "`getent group $GID`" ]; then
-#    addgroup -S -g $GID users
-#else
-#    groupmod -n users `getent group $GID | cut -d: -f1`
-#fi
+groupmod -o -g "$PGID" trojancaddy
+usermod -o -u "$PUID" trojancaddy
 
-#if [ -z "`getent passwd $UID`" ]; then
-#   adduser -S -u $UID -G users -s /bin/sh user
-#else
-#    usermod -l user -g $GID -d /srv -m `getent passwd $UID | cut -d: -f1`
-#fi
-
-#echo "user ALL=(root) NOPASSWD:ALL" > /etc/sudoers.d/user
-#chmod 0440 /etc/sudoers.d/user
-
-
+chown trojancaddy:trojancaddy /srv
+chown trojancaddy:trojancaddy /config
+chown trojancaddy:trojancaddy /defaults

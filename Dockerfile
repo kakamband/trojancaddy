@@ -41,37 +41,36 @@ FROM alpine:3.12
 ARG S6_OVERLAY_RELEASE=https://github.com/just-containers/s6-overlay/releases/latest/download/s6-overlay-amd64.tar.gz
 ENV S6_OVERLAY_RELEASE=${S6_OVERLAY_RELEASE}
 
-ADD rootfs /
-ADD ${S6_OVERLAY_RELEASE} /tmp/s6overlay.tar.gz
-
-RUN apk upgrade --update --no-cache \
-    && apk add --no-cache \
+RUN \
+    echo "**** install packages ****" && \
+    apk upgrade --update --no-cache && \
+    apk add --no-cache \
+        bash \
+        tzdata \
         ca-certificates \
         mailcap \
         libstdc++ \
         boost-system \
         boost-program_options \
         mariadb-connector-c \
-        openssl \
-    && rm -rf /var/cache/apk/* \
-    && tar xzf /tmp/s6overlay.tar.gz -C / \
-    && rm /tmp/s6overlay.tar.gz
-
-#RUN apk add --no-cache \
-#        ca-certificates \
-#        mailcap \
-#        libstdc++ \
-#        boost-system \
-#        boost-program_options \
-#        mariadb-connector-c \
-#        openssl; \
-#        openssl req -x509 -nodes -days 365 -subj "/C=CA/ST=QC/O=Company, Inc./CN=mydomain.com" -addext "subjectAltName=DNS:mydomain.com" -newkey rsa:2048 -keyout /etc/ssl/private/0-selfsigned.key -out /etc/ssl/certs/0-selfsigned.crt;
+        openssl && \
+    rm -rf /var/cache/apk/* && \
+    wget -O /tmp/s6overlay.tar.gz ${S6_OVERLAY_RELEASE} && \
+    tar xzf /tmp/s6overlay.tar.gz -C / && \
+    rm /tmp/s6overlay.tar.gz && \
+    groupmod -g 1000 users && \
+    useradd -u 911 -U -d /config -s /bin/false trojancaddy && \
+    usermod -G users trojancaddy && \
+    mkdir -p \
+		/config/caddy \
+		/data/caddy \
+		/etc/caddy \
+        /srv/caddy \
+        /config/trojan
 
 COPY --from=builder /usr/bin/caddy /usr/bin/caddy
 COPY --from=builder /usr/bin/trojan /usr/local/bin/trojan
-#COPY caddy.json /etc/caddy/config.json
-#COPY site.html /usr/share/caddy/index.html
-#COPY trojan.json /etc/trojan/config.json
+COPY rootfs/ /
 
 ENV XDG_CONFIG_HOME /config
 ENV XDG_DATA_HOME /data
@@ -82,6 +81,8 @@ VOLUME /data
 EXPOSE 80
 EXPOSE 443
 EXPOSE 2019
+
+WORKDIR /srv
 
 # CMD ["caddy", "run", "--config", "/etc/caddy/Caddyfile", "--adapter", "caddyfile"]
 # CMD ["trojan", "/etc/trojan/config.json"]
