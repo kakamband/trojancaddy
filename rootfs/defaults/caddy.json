@@ -1,0 +1,19 @@
+{
+  "apps": {
+    "http": {
+      "servers": {
+        "srv0": {
+          "listen": ["127.0.0.1:8080"],
+          "routes": [
+            {
+              "handle": [
+                { "handler": "vars", "root": "/usr/share/caddy" },
+                { "handler": "file_server", "hide": ["/etc/caddy/Caddyfile"] }
+              ]
+            }
+          ]
+        }
+      }
+    }
+  }
+}

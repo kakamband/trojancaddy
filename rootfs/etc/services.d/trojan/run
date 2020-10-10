@@ -1,0 +1,11 @@
+#!/usr/bin/with-contenv sh
+
+# #!/usr/bin/execlineb -P
+# with-contenv
+# s6-setuidgid user
+
+sleep 5
+
+if [ -f /etc/ssl/certs/0-selfsigned.crt ]; then
+    /usr/local/bin/trojan /etc/trojan/config.json
+fi

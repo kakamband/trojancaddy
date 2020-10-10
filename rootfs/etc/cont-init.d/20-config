@@ -1,0 +1,21 @@
+#!/usr/bin/with-contenv sh
+
+echo 'INIT...'
+
+mkdir -p \
+  /etc/caddy \
+  usr/share/caddy \
+  /etc/trojan
+
+[[ ! -f /etc/caddy/config.json ]] && \
+  cp /defaults/caddy.json /etc/caddy/config.json
+
+[[ ! -f /usr/share/caddy/index.html ]] && \
+  cp /defaults/index.html /usr/share/caddy/index.html
+
+[[ ! -f /etc/trojan/config.json ]] && \
+  cp /defaults/trojan.json /etc/trojan/config.json
+
+#chown -R abc:abc \
+#  /config \
+#  /etc/caddy
